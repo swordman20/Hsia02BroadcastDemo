@@ -194,3 +194,130 @@ public void sendBroadcast(View view){
 
 #以下是AndroidUI部分内容
 
+##Android自定义样式
+	1、在style中定义样式
+
+```
+<!--我的主题,继承自AppTheme-->
+    <style name="MyTheme" parent="AppTheme">
+        <item name="android:background">#ff0</item>
+        <item name="colorPrimaryDark">#ff0</item>
+    </style>
+
+    <!--定义自定义样式-->
+<style name="MyStyle">
+    <item name="android:layout_width">wrap_content</item>
+    <item name="android:layout_height">wrap_content</item>
+    <item name="android:textSize">23sp</item>
+    <item name="android:textColor">#ff0000</item>
+    <item name="android:layout_centerInParent">true</item>
+</style>
+```
+	2、在layout文件中引用
+
+```
+ <activity android:name=".MainActivity"
+            android:theme="@style/MyTheme">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+
+<!--引用自定义样式-->
+    <TextView
+        style="@style/MyStyle"
+        android:text="Hello World!" />
+```
+##Android中国际化
+	1、res目录下创建values—(国家编码）
+	2、在自己创建的vaules—(国家编码)文件中，复制strings.xml文件，并更改里面的字符串。
+
+##Android中定义帧动画
+步骤
+	1、在drawable目录下新建layout文件，根节点为animation-list，item为你的资源文件。
+
+```
+
+<animation-list xmlns:android="http://schemas.android.com/apk/res/android"
+    android:oneshot="true">
+    <item android:drawable="@drawable/rocket_thrust1" android:duration="200" />
+    <item android:drawable="@drawable/rocket_thrust2" android:duration="200" />
+    <item android:drawable="@drawable/rocket_thrust3" android:duration="200" />
+
+</animation-list>
+```
+	2、在Activity中找到imageview控件，并设置背景资源，强制转为AnimationDrawable，最后start动画。
+
+```
+
+rocketImage.setBackgroundResource(R.drawable.rocket_drawable);
+        rocketAnimation = (AnimationDrawable) rocketImage.getBackground();
+        rocketAnimation.start();
+```
+
+##Android补间动画
+
+```
+
+//渐变动画
+AlphaAnimation(1.0f,0.1f);
+//旋转动画
+RotateAnimation(0,360, Animation.RELATIVE_TO_SELF,0.5f,Animation.RELATIVE_TO_SELF,0.5f);
+//缩放动画
+ScaleAnimation(0.1f, 2.0f, 0.1f, 2.0f, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
+//位移动画
+new TranslateAnimation(Animation.RELATIVE_TO_PARENT, -0.5f, Animation.RELATIVE_TO_PARENT, 0.5f, Animation.RELATIVE_TO_PARENT, -0.5f, Animation.RELATIVE_TO_PARENT, 0.5f);
+
+//动画集合
+AnimationSet(false);
+
+```
+
+##Android中常用的对话框
+	因对话框基于AlertDialog这个类，所以只写了多选对话框代码，普通对话框和单选对话框以此类推。
+
+```
+//单选对话框
+ builder.setSingleChoiceItems(item, 1, new DialogInterface.OnClickListener() {
+
+//多选对话框
+ private void doubleMyDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("你喜欢吃那些食物？");
+        final String[] foods = {"大米","白菜","牛肉","热狗","披萨","火腿","豆腐"};
+        final boolean[] isCheck = {true,false,true,false,true,false,false};
+        //多选对话框
+        builder.setMultiChoiceItems(foods, isCheck, new DialogInterface.OnMultiChoiceClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which, boolean isChecked) {
+                //取反
+               isCheck[which] = isChecked;
+            }
+        });
+        //设置确定点击事件
+        builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                StringBuffer sb = new StringBuffer();
+                for (int i = 0; i < isCheck.length; i++) {
+                    if (isCheck[i]) {
+                        String food = foods[i];
+                        //拼接取出的水果
+                        sb.append(food + " ");
+                    }
+                }
+                Toast.makeText(getApplicationContext(), "你喜欢吃" + sb.toString(), Toast.LENGTH_SHORT).show();
+                dialog.dismiss();
+            }
+        });
+        builder.show();
+    }
+
+```
+
+**关于作者**
+	- Email：[xiaweifeng@live.cn](https://login.live.com)
+	- 项目地址:[https://github.com/swordman20/Hsia02BroadcastDemo](https://github.com/swordman20/Hsia02BroadcastDemo)
